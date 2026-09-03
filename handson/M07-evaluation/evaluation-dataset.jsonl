@@ -1,0 +1,5 @@
+{"user_input": "AnyCompany Cloud の Enterprise プランのバックアップ保持期間は？", "retrieved_contexts": ["バックアップの保持期間はプランによって異なります。Starter: 7 日間、Business: 30 日間、Enterprise: 90 日間。"], "response": "Enterprise プランのバックアップ保持期間は 90 日間です。", "reference": "Enterprise プランのバックアップ保持期間は 90 日間です。"}
+{"user_input": "Business プランの月額料金はいくらですか？", "retrieved_contexts": ["Business プラン: 月額 8,000 円。Web アプリ 20 個、ストレージ 100 GB、月間 500 万リクエストまで。"], "response": "Business プランは月額 8,000 円です。", "reference": "Business プランは月額 8,000 円です。"}
+{"user_input": "ログインに5回失敗するとどうなりますか？", "retrieved_contexts": ["パスワードの誤り（5 回連続で失敗するとアカウントが 15 分間ロックされます）。"], "response": "5 回連続でパスワードを間違えると、アカウントが 15 分間ロックされます。", "reference": "アカウントが 15 分間ロックされます。"}
+{"user_input": "MFA はどのプランから使えますか？", "retrieved_contexts": ["Business プラン以上では、多要素認証 (MFA) と IP アドレス制限が利用できます。"], "response": "多要素認証 (MFA) は Business プラン以上で利用できます。", "reference": "Business プラン以上で MFA が利用できます。"}
+{"user_input": "エラーコード DEPLOY_007 は何を意味しますか？", "retrieved_contexts": ["エラーコード DEPLOY_007 は、ビルド時間が 15 分の上限を超えたことを示します。"], "response": "DEPLOY_007 は、ビルド時間が 15 分の上限を超えたことを示すエラーです。", "reference": "ビルド時間が 15 分の上限を超えたことを示します。"}

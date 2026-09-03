@@ -1,0 +1,4 @@
+# AgentCore Runtime デプロイ用の依存関係
+bedrock-agentcore
+strands-agents
+strands-agents-tools
