@@ -44,7 +44,7 @@ cat evaluation-dataset.jsonl
 | `response` | RAG が生成した応答 |
 | `reference` | 期待される正解（リファレンス） |
 
-### ステップ 2.2: Ragas で評価を実行
+### ステップ 2.2: RAG 評価を実行
 
 ```bash
 python rag_evaluation.py
@@ -52,6 +52,16 @@ python rag_evaluation.py
 
 - 評価者 LLM（Claude Sonnet）と埋め込み（Titan V2）に Bedrock を使用
 - 3 つのメトリクスを算出（Bedrock を複数回呼ぶため数十秒かかります）
+
+> **パッケージについて（重要）**: EC2 デモ環境には必要なパッケージがインストール済みです。
+> **`pip install` を追加実行しないでください**（`rich` / `tenacity` などが別バージョンに
+> 置き換わり、他モジュール（Strands 等）が動かなくなることがあります）。
+>
+> **Ragas の既知の非互換**: `ragas` の一部バージョンは新しい `langchain-community` と
+> 非互換で、`import ragas` が `No module named 'langchain_community.chat_models.vertexai'`
+> で失敗することがあります。その場合 `rag_evaluation.py` は自動的に
+> **Bedrock ベースの自前評価（LLM-as-a-Judge + 埋め込み類似度）** にフォールバックします。
+> どちらの経路でも、各メトリクスの意味を学ぶ目的は同じです。
 
 | メトリクス | 意味 | 低いときの対処 |
 |-----------|------|--------------|
