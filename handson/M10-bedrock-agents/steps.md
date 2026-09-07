@@ -93,6 +93,15 @@ python agentcore_runtime_agent.py
 
 ### ステップ 3.3: AgentCore Runtime へデプロイ（スターターツールキット）
 
+> **`agentcore: command not found` が出る場合**: `agentcore` CLI は Python venv に
+> インストールされています。Session Manager 接続直後は venv が自動有効化されますが、
+> `sh` などに切り替えると PATH から外れることがあります。その場合は venv を有効化してください。
+> ```bash
+> source ~/.venv/bin/activate    # プロンプトが (.venv) になる
+> ```
+> （本デモ環境では `/usr/local/bin/agentcore` ラッパーも用意しているため、
+> 通常はどのシェルからでも `agentcore` を実行できます。）
+
 ```bash
 # 設定（entrypoint と requirements を指定）
 agentcore configure --entrypoint agentcore_runtime_agent.py
@@ -105,7 +114,15 @@ agentcore invoke '{"prompt": "AMZN の株価を教えてください。"}'
 ```
 
 > `agentcore` CLI は `bedrock-agentcore-starter-toolkit` に含まれます。
-> ARM64 コンテナのビルドが行われるため、Docker が必要です。
+> ARM64 コンテナのビルドが行われるため、**Docker が必要**です。
+> 本デモ環境（t3.large）には Docker は初期インストールされていません。デプロイを実施する場合は
+> 次でインストールしてください（Session Manager では `ssm-user` が sudo 可能です）。
+> ```bash
+> sudo dnf install -y docker && sudo systemctl start docker
+> sudo usermod -aG docker ssm-user   # 反映には再接続が必要
+> ```
+> コンテナビルドを避けたい場合は、後述の Harness（設定ベースのマネージドループ）や
+> コンソールからの Runtime 作成も選択できます。
 
 ### ステップ 3.4: AgentCore の機能マップ（座学）
 

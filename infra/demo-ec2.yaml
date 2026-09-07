@@ -246,6 +246,14 @@ Resources:
           chmod +x /usr/local/bin/python
           ln -sf $VENV_DIR/bin/pip /usr/local/bin/pip
 
+          # agentcore CLI もどのシェルからでも実行できるようにラッパー作成（M10 で使用）
+          cat > /usr/local/bin/agentcore << 'WRAPPER'
+          #!/bin/bash
+          source /home/ssm-user/.venv/bin/activate
+          exec /home/ssm-user/.venv/bin/agentcore "$@"
+          WRAPPER
+          chmod +x /usr/local/bin/agentcore
+
           # S3 からハンズオン資材をダウンロード
           echo "[3/5] S3 から資材ダウンロード..."
           WORK_DIR=/home/ssm-user/handson
