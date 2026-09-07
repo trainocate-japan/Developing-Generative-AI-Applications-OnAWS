@@ -146,6 +146,32 @@ Resources:
                   - logs:DeleteLogGroup
                   - logs:DescribeLogGroups
                 Resource: '*'
+        # M05(Knowledge Base) / M10(Flows) などで必要な IAM ロールの作成・管理。
+        # 誤用を避けるため GenAIHandson* という名前のロールに限定する。
+        - PolicyName: HandsonServiceRoleManagement
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - iam:CreateRole
+                  - iam:DeleteRole
+                  - iam:GetRole
+                  - iam:AttachRolePolicy
+                  - iam:DetachRolePolicy
+                  - iam:PutRolePolicy
+                  - iam:DeleteRolePolicy
+                  - iam:ListRolePolicies
+                  - iam:ListAttachedRolePolicies
+                  - iam:TagRole
+                Resource: arn:aws:iam::*:role/GenAIHandson*
+              # 作成したサービスロールを Bedrock / Flows / KB に渡すための PassRole
+              - Effect: Allow
+                Action: iam:PassRole
+                Resource: arn:aws:iam::*:role/GenAIHandson*
+                Condition:
+                  StringEquals:
+                    iam:PassedToService: bedrock.amazonaws.com
 
   DemoInstanceProfile:
     Type: AWS::IAM::InstanceProfile

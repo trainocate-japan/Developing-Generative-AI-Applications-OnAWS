@@ -12,6 +12,12 @@ cd ~/handson/M10-bedrock-agents
 
 Flows はプロンプトノードで Bedrock を呼ぶため、実行ロールが必要です。
 
+> **前提となる IAM 権限**: このロール作成には `iam:CreateRole` / `iam:AttachRolePolicy` /
+> `iam:PassRole`（Bedrock 向け）が必要です。本ハンズオンの EC2 デモ環境（`infra/demo-ec2.yaml`）は、
+> `GenAIHandson*` という名前のロールに限定してこれらの権限を EC2 ロールに付与済みのため、
+> 追加設定なしで下記コマンドを実行できます。
+> 自前の環境で実行する場合は、実行者に同等の IAM 権限が必要です。
+
 ```bash
 ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
 

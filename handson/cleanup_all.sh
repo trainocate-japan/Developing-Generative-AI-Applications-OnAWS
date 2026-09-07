@@ -90,10 +90,27 @@ FLOW_ID=$(aws bedrock-agent list-flows --region "$REGION" \
     --query "flowSummaries[?name=='genai-handson-flow'].id" \
     --output text 2>/dev/null || echo "")
 if [ -n "$FLOW_ID" ] && [ "$FLOW_ID" != "None" ]; then
+    # エイリアスが残っていると Flow 削除が ConflictException で失敗するため、
+    # 先にユーザー作成のエイリアスを削除する（テストエイリアス TSTALIASID は削除不可なので除外）
+    ALIAS_IDS=$(aws bedrock-agent list-flow-aliases --flow-identifier "$FLOW_ID" --region "$REGION" \
+        --query "flowAliasSummaries[?id!='TSTALIASID'].id" --output text 2>/dev/null || echo "")
+    for AID in $ALIAS_IDS; do
+        aws bedrock-agent delete-flow-alias --flow-identifier "$FLOW_ID" --alias-identifier "$AID" --region "$REGION" >/dev/null 2>&1 && \
+            echo "  OK Flow エイリアス削除: $AID" || echo "  WARN Flow エイリアス削除失敗: $AID"
+    done
     aws bedrock-agent delete-flow --flow-identifier "$FLOW_ID" --region "$REGION" >/dev/null 2>&1 && \
         echo "  OK Flow 削除: $FLOW_ID" || echo "  WARN Flow 削除失敗: $FLOW_ID"
 else
     echo "  -- Flow なし: genai-handson-flow（スキップ）"
+fi
+# Flows 実行ロールの削除
+if aws iam get-role --role-name GenAIHandsonFlowsRole >/dev/null 2>&1; then
+    aws iam detach-role-policy --role-name GenAIHandsonFlowsRole \
+        --policy-arn arn:aws:iam::aws:policy/AmazonBedrockFullAccess >/dev/null 2>&1 || true
+    aws iam delete-role --role-name GenAIHandsonFlowsRole >/dev/null 2>&1 && \
+        echo "  OK IAM ロール削除: GenAIHandsonFlowsRole" || echo "  WARN IAM ロール削除失敗: GenAIHandsonFlowsRole"
+else
+    echo "  -- IAM ロールなし: GenAIHandsonFlowsRole（スキップ）"
 fi
 echo "  i AgentCore Runtime を 'agentcore' CLI でデプロイした場合は、以下で削除してください:"
 echo "     agentcore destroy   （または AWS コンソール → Bedrock AgentCore → Runtime）"
