@@ -1,8 +1,13 @@
 """
-モジュール 8: Bedrock Guardrail の作成
+モジュール 8: Bedrock Guardrail の作成（Standard Tier / 日本語対応）
 ------------------------------------------------------------
 CreateGuardrail API で、コンテンツフィルター・拒否トピック・単語フィルター・
 PII フィルターを備えたガードレールを作成します。作成後、テスト用のバージョンを発行します。
+
+このハンズオンでは日本語コンテンツを扱うため、Standard Tier を使用します。
+Standard Tier は日本語を「Optimized and supported（最適化＆サポート）」で扱えます
+（Classic Tier では日本語の検出精度が限定的）。
+Standard Tier の利用にはクロスリージョン設定（ガードレールプロファイル）が必須です。
 
 作成される Guardrail 名: genai-handson-guardrail
 後片付けは handson/cleanup_all.sh を実行してください。
@@ -16,6 +21,9 @@ from botocore.config import Config
 
 REGION = "us-east-1"
 GUARDRAIL_NAME = "genai-handson-guardrail"
+# クロスリージョン推論用のガードレールプロファイル（US 境界）
+# us-east-1 / us-east-2 / us-west-2 へ自動ルーティングされる
+GUARDRAIL_PROFILE_ID = "us.guardrail.v1:0"
 
 
 def find_existing(bedrock):
@@ -45,8 +53,12 @@ def main():
 
     resp = bedrock.create_guardrail(
         name=GUARDRAIL_NAME,
-        description="責任ある AI ハンズオン用ガードレール",
-        # 拒否トピック: 投資助言を扱わない
+        description="責任ある AI ハンズオン用ガードレール（Standard Tier / 日本語対応）",
+        # --- クロスリージョン設定（Standard Tier に必須）---
+        # ガードレール推論を US 内の複数リージョンに自動ルーティングし、
+        # Standard Tier の拡張機能（多言語・高精度）を有効にする。
+        crossRegionConfig={"guardrailProfileIdentifier": GUARDRAIL_PROFILE_ID},
+        # 拒否トピック: 投資助言を扱わない（Standard Tier）
         topicPolicyConfig={
             "topicsConfig": [
                 {
@@ -58,9 +70,11 @@ def main():
                     ],
                     "type": "DENY",
                 }
-            ]
+            ],
+            # Standard Tier: 日本語を含む多言語を「最適化＆サポート」で扱える
+            "tierConfig": {"tierName": "STANDARD"},
         },
-        # コンテンツフィルター: 憎悪・侮辱・性的・暴力・プロンプト攻撃
+        # コンテンツフィルター: 憎悪・侮辱・性的・暴力・プロンプト攻撃（Standard Tier）
         contentPolicyConfig={
             "filtersConfig": [
                 {"type": "HATE", "inputStrength": "HIGH", "outputStrength": "HIGH"},
@@ -68,7 +82,8 @@ def main():
                 {"type": "SEXUAL", "inputStrength": "HIGH", "outputStrength": "HIGH"},
                 {"type": "VIOLENCE", "inputStrength": "HIGH", "outputStrength": "HIGH"},
                 {"type": "PROMPT_ATTACK", "inputStrength": "HIGH", "outputStrength": "NONE"},
-            ]
+            ],
+            "tierConfig": {"tierName": "STANDARD"},
         },
         # 単語フィルター: 冒涜語のマネージドリスト
         wordPolicyConfig={

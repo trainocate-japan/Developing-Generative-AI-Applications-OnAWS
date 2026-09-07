@@ -34,6 +34,15 @@ python create_guardrail.py
 - **単語フィルター**: 冒涜語（マネージドリスト）
 - **機密情報フィルター**: メール・電話番号を匿名化（マスク）
 
+> **Standard Tier と日本語対応（重要）**: このハンズオンは日本語コンテンツを扱うため、
+> ガードレールを **Standard Tier** で作成します。Standard Tier は日本語を
+> 「Optimized and supported（最適化＆サポート）」で扱えます（Classic Tier では
+> 日本語の拒否トピック・コンテンツ検出の精度が限定的）。
+> Standard Tier はクロスリージョン設定が必須のため、コード内で
+> `crossRegionConfig`（ガードレールプロファイル `us.guardrail.v1:0`）と
+> 各ポリシーの `tierConfig={"tierName": "STANDARD"}` を指定しています。
+> `us.` プロファイルは推論を us-east-1 / us-east-2 / us-west-2 へ自動ルーティングします。
+
 出力された Guardrail ID を控えます。
 
 ```bash
@@ -118,4 +127,6 @@ bash cleanup_all.sh   # genai-handson-guardrail を削除
 
 - [Amazon Bedrock Guardrails](https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails.html)
 - [ApplyGuardrail API](https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_ApplyGuardrail.html)
+- [Guardrails がサポートする言語（Standard Tier）](https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-supported-languages.html)
+- [クロスリージョンガードレール推論](https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-cross-region.html)
 - [AWS の責任ある AI](https://aws.amazon.com/machine-learning/responsible-ai/)
