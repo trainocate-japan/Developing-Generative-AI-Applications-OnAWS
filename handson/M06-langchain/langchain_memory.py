@@ -41,12 +41,20 @@ def ensure_table():
     print("  作成完了")
 
 
+# リージョンを指定した boto3 セッション（DynamoDBChatMessageHistory に渡す）
+BOTO3_SESSION = boto3.Session(region_name=REGION)
+
+
 def get_history(session_id: str) -> DynamoDBChatMessageHistory:
-    """session_id に対応する DynamoDB バックエンドの履歴を返す"""
+    """session_id に対応する DynamoDB バックエンドの履歴を返す。
+
+    注: DynamoDBChatMessageHistory は region_name を受け取らないため、
+    リージョンは boto3_session（boto3.Session）で指定する。
+    """
     return DynamoDBChatMessageHistory(
         table_name=TABLE_NAME,
         session_id=session_id,
-        region_name=REGION,
+        boto3_session=BOTO3_SESSION,
     )
 
 

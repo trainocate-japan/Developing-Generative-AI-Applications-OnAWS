@@ -69,6 +69,11 @@ python langchain_memory.py
 - 1 つ目で名前を伝え、2 つ目で「名前を覚えていますか？」に答えられることを確認
 - `RunnableWithMessageHistory` が `session_id` ごとに履歴を DynamoDB から出し入れ
 
+> **補足（DeprecationWarning について）**: 実行時に `langchain-community` のサンセットや
+> `RunnableWithMessageHistory` の非推奨に関する警告が表示される場合があります。
+> 動作には影響しません。より新しい構成では、履歴管理に **LangGraph の永続化（checkpointer）** を
+> 使う方法が推奨されています。本ハンズオンでは概念理解のため従来の構成を使用しています。
+
 ### ステップ 4.2: 永続化を確認する
 
 ```bash
