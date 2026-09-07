@@ -32,7 +32,7 @@ def chat_once(br, messages):
         modelId=MODEL_ID,
         messages=messages,
         system=[{"text": SYSTEM}],
-        inferenceConfig={"maxTokens": 300, "temperature": 0.5, "topP": 0.9},
+        inferenceConfig={"maxTokens": 300, "temperature": 0.5},
     )
     return resp["output"]["message"]["content"][0]["text"].strip()
 

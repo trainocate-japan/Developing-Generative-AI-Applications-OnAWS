@@ -20,7 +20,7 @@ MODEL_ID = "us.amazon.nova-lite-v1:0"
 
 
 def run(bedrock_runtime, prompt: str, temperature: float, stop=None) -> str:
-    inference_config = {"maxTokens": 120, "temperature": temperature, "topP": 0.9}
+    inference_config = {"maxTokens": 120, "temperature": temperature}
     if stop:
         inference_config["stopSequences"] = stop
     resp = bedrock_runtime.converse(

@@ -26,7 +26,7 @@ def ask(bedrock_runtime, prompt: str) -> str:
     resp = bedrock_runtime.converse(
         modelId=MODEL_ID,
         messages=[{"role": "user", "content": [{"text": prompt}]}],
-        inferenceConfig={"maxTokens": 300, "temperature": 0.3, "topP": 0.9},
+        inferenceConfig={"maxTokens": 300, "temperature": 0.3},
     )
     return resp["output"]["message"]["content"][0]["text"].strip()
 

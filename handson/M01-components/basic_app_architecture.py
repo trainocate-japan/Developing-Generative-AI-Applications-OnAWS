@@ -34,7 +34,7 @@ def call_fm(bedrock_runtime, messages: list) -> str:
         messages=messages,
         system=[{"text": "あなたは親切な旅行アシスタントです。簡潔に日本語で答えてください。"}],
         # maxTokens は必ず明示する（未指定はスロットリングの原因）
-        inferenceConfig={"maxTokens": 512, "temperature": 0.7, "topP": 0.9},
+        inferenceConfig={"maxTokens": 512, "temperature": 0.7},
     )
     return response["output"]["message"]["content"][0]["text"]
 

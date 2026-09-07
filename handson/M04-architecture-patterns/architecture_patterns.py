@@ -19,7 +19,7 @@ def converse(bedrock_runtime, messages, system=None, max_tokens=400):
     kwargs = {
         "modelId": MODEL_ID,
         "messages": messages,
-        "inferenceConfig": {"maxTokens": max_tokens, "temperature": 0.5, "topP": 0.9},
+        "inferenceConfig": {"maxTokens": max_tokens, "temperature": 0.5},
     }
     if system:
         kwargs["system"] = [{"text": system}]

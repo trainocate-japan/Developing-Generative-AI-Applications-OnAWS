@@ -7,6 +7,7 @@ modelId を変えるだけでモデルを切り替えられるのが最大の利
   - system: システムプロンプト（役割・行動ガイドライン）
   - messages: 会話のやり取り
   - inferenceConfig: maxTokens / temperature / topP / stopSequences（共通）
+    ※ Claude 4.5 など一部モデルは temperature と topP の同時指定不可。片方に絞る。
 
 実行:
     python converse_api.py
@@ -36,7 +37,9 @@ def converse(bedrock_runtime, model_id: str, prompt: str) -> dict:
                 )
             }
         ],
-        inferenceConfig={"maxTokens": 400, "temperature": 0.7, "topP": 0.9},
+        # 注: 一部のモデル（Claude 4.5 など）は temperature と topP の
+        # 同時指定を許容しません。ここでは温度のみを指定して両モデルで動作させます。
+        inferenceConfig={"maxTokens": 400, "temperature": 0.7},
     )
 
 

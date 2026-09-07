@@ -67,7 +67,7 @@ def main():
     resp = br.converse(
         modelId=GEN_MODEL_ID,
         messages=[{"role": "user", "content": [{"text": prompt}]}],
-        inferenceConfig={"maxTokens": 400, "temperature": 0.2, "topP": 0.9},
+        inferenceConfig={"maxTokens": 400, "temperature": 0.2},
     )
     answer = resp["output"]["message"]["content"][0]["text"].strip()
 
